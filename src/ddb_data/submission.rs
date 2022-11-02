@@ -305,10 +305,7 @@ impl SubmissionBuilder {
     /// assert_eq!(result, expected);
     /// ```
     pub fn build(self) -> Result<Submission, SubmissionBuildError> {
-        let id = match self.id {
-            None => SubmissionId::new(),
-            Some(id0) => id0,
-        };
+        let id = self.id.unwrap_or(SubmissionId::new());
 
         let author_id = self.author_id.ok_or(
             SubmissionBuildError::EmptyData("author_id".to_string())
@@ -370,7 +367,7 @@ mod tests {
 
     #[test]
     fn test_submission_builder() {
-        let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
+        let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234, 0), Utc);
         let result = SubmissionBuilder::new()
             // .with_id(SubmissionId::from("id111".to_string()).unwrap())
             .with_author_id("author111".to_string())
