@@ -24,3 +24,5 @@ serde = { version = "1.0", features = ["derive"]}
 serde_dynamo = "4.0.9"
 uuid = {version = "1.2.1", features=["v4",  "fast-rng", "macro-diagnostics"]}
 chrono = {version="0.4",features = ["serde"]}
+thiserror = "1.0.37"
+anyhow = "1.0.66"
