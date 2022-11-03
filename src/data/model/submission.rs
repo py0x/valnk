@@ -5,44 +5,16 @@ use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use thiserror::Error;
 
-use super::entity::EntityType;
+use super::entity::{EntityType, EntityId};
 
-type RankingScore = u32;
-
-const SUBMISSION_TAG: &str = "SUBMS";
+pub const SUBMISSION_TAG: &str = "SUBMS";
 const TOPIC_TAG: &str = "TOPIC";
 const AUTHOR_TAG: &str = "AUTHR";
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-pub struct SubmissionId(String);
+pub type RankingScore = i64;
+pub type SubmissionId = EntityId;
 
-impl SubmissionId {
-    pub fn new() -> SubmissionId {
-        let id = Uuid::new_v4().to_string();
-        return SubmissionId(id);
-    }
-
-    pub fn from(id: String) -> Result<SubmissionId, String> {
-        if id.len() > 0 {
-            return Ok(SubmissionId(id));
-        }
-
-        return Err("invalid submission id: empty id".to_string());
-    }
-}
-
-impl AsRef<str> for SubmissionId {
-    fn as_ref(&self) -> &str {
-        return &self.0;
-    }
-}
-
-impl fmt::Display for SubmissionId {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0)
-    }
-}
-
+/// The PrimaryKey of the `submission` item.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct PrimaryKey {
     #[serde(rename(serialize = "PK", deserialize = "PK"))]
@@ -51,14 +23,11 @@ pub struct PrimaryKey {
     pub sk: String,
 }
 
-/// The PrimaryKey of the `submission` item.
 impl PrimaryKey {
-    /// The PrimaryKey of submissions.
-    ///
     /// # Examples:
     ///
     /// ```
-    /// use valnk::ddb_data::submission::{PrimaryKey, SubmissionId};
+    /// use valnk::data::model::submission::{PrimaryKey, SubmissionId};
     /// let id = SubmissionId::from("id1".to_string()).unwrap();
     /// let pk = PrimaryKey::new(&id);
     ///
@@ -79,6 +48,8 @@ impl PrimaryKey {
     }
 }
 
+
+/// For indexing submissions by `topic`.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct TopicIndexKey {
     #[serde(rename(serialize = "GSI1_PK", deserialize = "GSI1_PK"))]
@@ -88,19 +59,17 @@ pub struct TopicIndexKey {
 }
 
 impl TopicIndexKey {
-    /// For indexing submissions by `topic`.
-    ///
     /// # Examples
     ///
     /// ```
-    /// use valnk::ddb_data::submission::TopicIndexKey;
+    /// use valnk::data::model::submission::TopicIndexKey;
     ///
-    /// let topic = "news";
+    /// let topic = "topic_xxx";
     /// let score = 192;
     ///
     /// let topic_key = TopicIndexKey::new(topic, &score);
     /// let expected = TopicIndexKey {
-    ///     pk: String::from("TOPIC#news"),
+    ///     pk: String::from("TOPIC#topic_xxx"),
     ///     sk: String::from("SUBMS#0000000192"),
     /// };
     /// assert_eq!(topic_key, expected);
@@ -116,6 +85,7 @@ impl TopicIndexKey {
     }
 }
 
+/// For indexing submissions by `author_id`.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct AuthorIndexKey {
     #[serde(rename(serialize = "GSI2_PK", deserialize = "GSI2_PK"))]
@@ -125,12 +95,10 @@ pub struct AuthorIndexKey {
 }
 
 impl AuthorIndexKey {
-    /// For indexing submissions by `author_id`.
-    ///
     /// # Examples
     ///
     /// ```
-    /// use valnk::ddb_data::submission::AuthorIndexKey;
+    /// use valnk::data::model::submission::AuthorIndexKey;
     /// use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
     ///
     /// let author_id = "py0x";
@@ -192,6 +160,9 @@ pub struct SubmissionBuilder {
     title: Option<String>,
     url: Option<String>,
     text: Option<String>,
+
+    // todo
+    // n_likes, n_comments
 
     created_at: Option<DateTime<Utc>>,
     updated_at: Option<DateTime<Utc>>,
@@ -268,8 +239,8 @@ impl SubmissionBuilder {
     ///
     /// ```
     /// use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
-    /// use valnk::ddb_data::entity::EntityType;
-    /// use valnk::ddb_data::submission::{AuthorIndexKey, PrimaryKey, Submission, SubmissionBuilder, SubmissionId, TopicIndexKey};
+    /// use valnk::data::model::entity::EntityType;
+    /// use valnk::data::model::submission::{AuthorIndexKey, PrimaryKey, Submission, SubmissionBuilder, SubmissionId, TopicIndexKey};
     ///
     /// let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
     /// let result = SubmissionBuilder::new()
@@ -355,32 +326,5 @@ impl SubmissionBuilder {
             created_at,
             updated_at,
         })
-    }
-}
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use super::super::entity::EntityType;
-    use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
-
-    #[test]
-    fn test_submission_builder() {
-        let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234, 0), Utc);
-        let result = SubmissionBuilder::new()
-            // .with_id(SubmissionId::from("id111".to_string()).unwrap())
-            .with_author_id("author111".to_string())
-            .with_topic("topic111".to_string())
-            .with_ranking_score(999)
-            .with_title("title111".to_string())
-            .with_url("url111".to_string())
-            .with_text("text111".to_string())
-            // .with_created_at(current_dt)
-            // .with_updated_at(current_dt)
-            .build()
-            .unwrap();
-
-        println!("{result:#?}");
     }
 }

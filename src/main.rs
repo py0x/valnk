@@ -1,6 +1,6 @@
-mod ddb_data;
+mod data;
 
-use ddb_data::submission;
+// use model::submission;
 
 use rocket::{get, routes};
 use rocket::response::status;
