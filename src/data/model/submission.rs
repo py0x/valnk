@@ -147,6 +147,9 @@ pub struct Submission {
     pub url: String,
     pub text: String,
 
+    pub n_likes: u64,
+    pub n_comments: u64,
+
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -161,8 +164,8 @@ pub struct SubmissionBuilder {
     url: Option<String>,
     text: Option<String>,
 
-    // todo
-    // n_likes, n_comments
+    n_likes: Option<u64>,
+    n_comments: Option<u64>,
 
     created_at: Option<DateTime<Utc>>,
     updated_at: Option<DateTime<Utc>>,
@@ -223,6 +226,16 @@ impl SubmissionBuilder {
         self
     }
 
+    pub fn with_n_likes(mut self, n_likes: u64) -> SubmissionBuilder {
+        self.n_likes = Some(n_likes);
+        self
+    }
+
+    pub fn with_n_comments(mut self, n_comments: u64) -> SubmissionBuilder {
+        self.n_comments = Some(n_comments);
+        self
+    }
+
     pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> SubmissionBuilder {
         self.created_at = Some(created_at);
         self
@@ -240,7 +253,7 @@ impl SubmissionBuilder {
     /// ```
     /// use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
     /// use valnk::data::model::entity::EntityType;
-    /// use valnk::data::model::submission::{AuthorIndexKey, PrimaryKey, Submission, SubmissionBuilder, SubmissionId, TopicIndexKey};
+    /// use valnk::data::model::submission::*;
     ///
     /// let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
     /// let result = SubmissionBuilder::new()
@@ -269,6 +282,8 @@ impl SubmissionBuilder {
     ///     title: "title111".to_string(),
     ///     url: "url111".to_string(),
     ///     text: "text111".to_string(),
+    ///     n_likes: 0,
+    ///     n_comments: 0,
     ///     created_at: current_dt,
     ///     updated_at: current_dt,
     /// };
@@ -302,6 +317,9 @@ impl SubmissionBuilder {
             SubmissionBuildError::EmptyData("text".to_string())
         )?;
 
+        let n_likes = self.n_likes.unwrap_or(0);
+        let n_comments = self.n_comments.unwrap_or(0);
+
         let current_dt = Utc::now();
         let created_at = self.created_at.unwrap_or(current_dt);
         let updated_at = self.updated_at.unwrap_or(current_dt);
@@ -323,6 +341,8 @@ impl SubmissionBuilder {
             title,
             url,
             text,
+            n_likes,
+            n_comments,
             created_at,
             updated_at,
         })
