@@ -147,7 +147,7 @@ pub struct Submission {
     pub url: String,
     pub text: String,
 
-    pub n_likes: u64,
+    pub n_votes: u64,
     pub n_comments: u64,
 
     pub created_at: DateTime<Utc>,
@@ -164,7 +164,7 @@ pub struct SubmissionBuilder {
     url: Option<String>,
     text: Option<String>,
 
-    n_likes: Option<u64>,
+    n_votes: Option<u64>,
     n_comments: Option<u64>,
 
     created_at: Option<DateTime<Utc>>,
@@ -226,8 +226,8 @@ impl SubmissionBuilder {
         self
     }
 
-    pub fn with_n_likes(mut self, n_likes: u64) -> SubmissionBuilder {
-        self.n_likes = Some(n_likes);
+    pub fn with_n_votes(mut self, n_votes: u64) -> SubmissionBuilder {
+        self.n_votes = Some(n_votes);
         self
     }
 
@@ -282,7 +282,7 @@ impl SubmissionBuilder {
     ///     title: "title111".to_string(),
     ///     url: "url111".to_string(),
     ///     text: "text111".to_string(),
-    ///     n_likes: 0,
+    ///     n_votes: 0,
     ///     n_comments: 0,
     ///     created_at: current_dt,
     ///     updated_at: current_dt,
@@ -317,7 +317,7 @@ impl SubmissionBuilder {
             SubmissionBuildError::EmptyData("text".to_string())
         )?;
 
-        let n_likes = self.n_likes.unwrap_or(0);
+        let n_votes = self.n_votes.unwrap_or(0);
         let n_comments = self.n_comments.unwrap_or(0);
 
         let current_dt = Utc::now();
@@ -341,7 +341,7 @@ impl SubmissionBuilder {
             title,
             url,
             text,
-            n_likes,
+            n_votes,
             n_comments,
             created_at,
             updated_at,
