@@ -38,12 +38,12 @@ impl PrimaryKey {
     ///     sk: String::from("A"),
     /// });
     /// ```
-    pub fn new(id: &CommentId) -> PrimaryKey {
+    pub fn new(id: &CommentId) -> Self {
         let id_str = id.as_ref();
         let pk = format!("{COMMENT_TAG}#{id_str}");
         let sk = String::from("A");
 
-        return PrimaryKey {
+        return Self {
             pk,
             sk,
         };
@@ -76,11 +76,11 @@ impl SubmissionIndexKey {
     /// };
     /// assert_eq!(subm_key, expected);
     /// ```
-    pub fn new(submission_id: &SubmissionId, score: &RankingScore) -> SubmissionIndexKey {
+    pub fn new(submission_id: &SubmissionId, score: &RankingScore) -> Self {
         let pk = format!("{SUBMISSION_TAG}#{submission_id}");
         let sk = format!("{COMMENT_TAG}#{score:010}");
 
-        return SubmissionIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -114,13 +114,13 @@ impl AuthorIndexKey {
     ///
     /// assert_eq!(author_key, expected);
     /// ```
-    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> AuthorIndexKey {
+    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> Self {
         let created_at_ts = created_at.timestamp();
 
         let pk = format!("{AUTHOR_TAG}#{author_id}");
         let sk = format!("{COMMENT_TAG}#{created_at_ts:010}");
 
-        return AuthorIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -186,56 +186,56 @@ pub enum CommentBuildError {
 }
 
 impl CommentBuilder {
-    pub fn new() -> CommentBuilder {
+    pub fn new() -> Self {
         return CommentBuilder::default();
     }
 
-    pub fn with_id(mut self, id: CommentId) -> CommentBuilder {
+    pub fn with_id(mut self, id: CommentId) -> Self {
         self.id = Some(id);
         self
     }
 
-    pub fn with_submission_id(mut self, submission_id: SubmissionId) -> CommentBuilder {
+    pub fn with_submission_id(mut self, submission_id: SubmissionId) -> Self {
         self.submission_id = Some(submission_id);
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> CommentBuilder {
+    pub fn with_author_id(mut self, author_id: String) -> Self {
         self.author_id = Some(author_id);
         self
     }
 
-    pub fn with_topic(mut self, topic: String) -> CommentBuilder {
+    pub fn with_topic(mut self, topic: String) -> Self {
         self.topic = Some(topic);
         self
     }
 
-    pub fn with_ranking_score(mut self, ranking_score: RankingScore) -> CommentBuilder {
+    pub fn with_ranking_score(mut self, ranking_score: RankingScore) -> Self {
         self.ranking_score = Some(ranking_score);
         self
     }
 
-    pub fn with_text(mut self, text: String) -> CommentBuilder {
+    pub fn with_text(mut self, text: String) -> Self {
         self.text = Some(text);
         self
     }
 
-    pub fn with_n_votes(mut self, n_votes: u64) -> CommentBuilder {
+    pub fn with_n_votes(mut self, n_votes: u64) -> Self {
         self.n_votes = Some(n_votes);
         self
     }
 
-    pub fn with_n_replies(mut self, n_replies: u64) -> CommentBuilder {
+    pub fn with_n_replies(mut self, n_replies: u64) -> Self {
         self.n_replies = Some(n_replies);
         self
     }
 
-    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> CommentBuilder {
+    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> Self {
         self.created_at = Some(created_at);
         self
     }
 
-    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> CommentBuilder {
+    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> Self {
         self.updated_at = Some(updated_at);
         self
     }

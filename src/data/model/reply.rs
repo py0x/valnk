@@ -37,12 +37,12 @@ impl PrimaryKey {
     ///     sk: String::from("A"),
     /// });
     /// ```
-    pub fn new(id: &ReplyId) -> PrimaryKey {
+    pub fn new(id: &ReplyId) -> Self {
         let id_str = id.as_ref();
         let pk = format!("{REPLY_TAG}#{id_str}");
         let sk = String::from("A");
 
-        return PrimaryKey {
+        return Self {
             pk,
             sk,
         };
@@ -78,13 +78,13 @@ impl SubmissionCommentIndexKey {
     /// };
     /// assert_eq!(subm_key, expected);
     /// ```
-    pub fn new(submission_id: &SubmissionId, comment_id: &CommentId, created_at: &DateTime<Utc>) -> SubmissionCommentIndexKey {
+    pub fn new(submission_id: &SubmissionId, comment_id: &CommentId, created_at: &DateTime<Utc>) -> Self {
         let created_at_ts = created_at.timestamp();
 
         let pk = format!("{SUBMISSION_TAG}#{submission_id}");
         let sk = format!("{REPLY_TAG}#{comment_id}#{created_at_ts:010}");
 
-        return SubmissionCommentIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -118,13 +118,13 @@ impl AuthorIndexKey {
     ///
     /// assert_eq!(author_key, expected);
     /// ```
-    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> AuthorIndexKey {
+    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> Self {
         let created_at_ts = created_at.timestamp();
 
         let pk = format!("{AUTHOR_TAG}#{author_id}");
         let sk = format!("{REPLY_TAG}#{created_at_ts:010}");
 
-        return AuthorIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -183,41 +183,41 @@ pub enum ReplyBuildError {
 }
 
 impl ReplyBuilder {
-    pub fn new() -> ReplyBuilder {
+    pub fn new() -> Self {
         return ReplyBuilder::default();
     }
 
-    pub fn with_id(mut self, id: ReplyId) -> ReplyBuilder {
+    pub fn with_id(mut self, id: ReplyId) -> Self {
         self.id = Some(id);
         self
     }
 
-    pub fn with_submission_id(mut self, submission_id: SubmissionId) -> ReplyBuilder {
+    pub fn with_submission_id(mut self, submission_id: SubmissionId) -> Self {
         self.submission_id = Some(submission_id);
         self
     }
 
-    pub fn with_comment_id(mut self, comment_id: CommentId) -> ReplyBuilder {
+    pub fn with_comment_id(mut self, comment_id: CommentId) -> Self {
         self.comment_id = Some(comment_id);
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> ReplyBuilder {
+    pub fn with_author_id(mut self, author_id: String) -> Self {
         self.author_id = Some(author_id);
         self
     }
 
-    pub fn with_text(mut self, text: String) -> ReplyBuilder {
+    pub fn with_text(mut self, text: String) -> Self {
         self.text = Some(text);
         self
     }
 
-    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> ReplyBuilder {
+    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> Self {
         self.created_at = Some(created_at);
         self
     }
 
-    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> ReplyBuilder {
+    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> Self {
         self.updated_at = Some(updated_at);
         self
     }

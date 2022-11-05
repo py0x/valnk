@@ -36,12 +36,12 @@ impl PrimaryKey {
     ///     sk: String::from("A"),
     /// });
     /// ```
-    pub fn new(id: &SubmissionId) -> PrimaryKey {
+    pub fn new(id: &SubmissionId) -> Self {
         let id_str = id.as_ref();
         let pk = format!("{SUBMISSION_TAG}#{id_str}");
         let sk = String::from("A");
 
-        return PrimaryKey {
+        return Self {
             pk,
             sk,
         };
@@ -74,11 +74,11 @@ impl TopicIndexKey {
     /// };
     /// assert_eq!(topic_key, expected);
     /// ```
-    pub fn new(topic: &str, score: &RankingScore) -> TopicIndexKey {
+    pub fn new(topic: &str, score: &RankingScore) -> Self {
         let pk = format!("{TOPIC_TAG}#{topic}");
         let sk = format!("{SUBMISSION_TAG}#{score:010}");
 
-        return TopicIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -112,13 +112,13 @@ impl AuthorIndexKey {
     ///
     /// assert_eq!(author_key, expected);
     /// ```
-    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> AuthorIndexKey {
+    pub fn new(author_id: &str, created_at: &DateTime<Utc>) -> Self {
         let created_at_ts = created_at.timestamp();
 
         let pk = format!("{AUTHOR_TAG}#{author_id}");
         let sk = format!("{SUBMISSION_TAG}#{created_at_ts:010}");
 
-        return AuthorIndexKey {
+        return Self {
             pk,
             sk,
         };
@@ -187,61 +187,61 @@ pub enum SubmissionBuildError {
 }
 
 impl SubmissionBuilder {
-    pub fn new() -> SubmissionBuilder {
+    pub fn new() -> Self {
         return SubmissionBuilder::default();
     }
 
-    pub fn with_id(mut self, id: SubmissionId) -> SubmissionBuilder {
+    pub fn with_id(mut self, id: SubmissionId) -> Self {
         self.id = Some(id);
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> SubmissionBuilder {
+    pub fn with_author_id(mut self, author_id: String) -> Self {
         self.author_id = Some(author_id);
         self
     }
 
-    pub fn with_topic(mut self, topic: String) -> SubmissionBuilder {
+    pub fn with_topic(mut self, topic: String) -> Self {
         self.topic = Some(topic);
         self
     }
 
-    pub fn with_ranking_score(mut self, ranking_score: RankingScore) -> SubmissionBuilder {
+    pub fn with_ranking_score(mut self, ranking_score: RankingScore) -> Self {
         self.ranking_score = Some(ranking_score);
         self
     }
 
-    pub fn with_title(mut self, title: String) -> SubmissionBuilder {
+    pub fn with_title(mut self, title: String) -> Self {
         self.title = Some(title);
         self
     }
 
-    pub fn with_url(mut self, url: String) -> SubmissionBuilder {
+    pub fn with_url(mut self, url: String) -> Self {
         self.url = Some(url);
         self
     }
 
-    pub fn with_text(mut self, text: String) -> SubmissionBuilder {
+    pub fn with_text(mut self, text: String) -> Self {
         self.text = Some(text);
         self
     }
 
-    pub fn with_n_votes(mut self, n_votes: u64) -> SubmissionBuilder {
+    pub fn with_n_votes(mut self, n_votes: u64) -> Self {
         self.n_votes = Some(n_votes);
         self
     }
 
-    pub fn with_n_comments(mut self, n_comments: u64) -> SubmissionBuilder {
+    pub fn with_n_comments(mut self, n_comments: u64) -> Self {
         self.n_comments = Some(n_comments);
         self
     }
 
-    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> SubmissionBuilder {
+    pub fn with_created_at(mut self, created_at: DateTime<Utc>) -> Self {
         self.created_at = Some(created_at);
         self
     }
 
-    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> SubmissionBuilder {
+    pub fn with_updated_at(mut self, updated_at: DateTime<Utc>) -> Self {
         self.updated_at = Some(updated_at);
         self
     }
