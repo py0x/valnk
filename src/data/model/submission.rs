@@ -196,13 +196,13 @@ impl SubmissionBuilder {
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> Self {
-        self.author_id = Some(author_id);
+    pub fn with_author_id(mut self, author_id: impl Into<String>) -> Self {
+        self.author_id = Some(author_id.into());
         self
     }
 
-    pub fn with_topic(mut self, topic: String) -> Self {
-        self.topic = Some(topic);
+    pub fn with_topic(mut self, topic: impl Into<String>) -> Self {
+        self.topic = Some(topic.into());
         self
     }
 
@@ -211,18 +211,18 @@ impl SubmissionBuilder {
         self
     }
 
-    pub fn with_title(mut self, title: String) -> Self {
-        self.title = Some(title);
+    pub fn with_title(mut self, title: impl Into<String>) -> Self {
+        self.title = Some(title.into());
         self
     }
 
-    pub fn with_url(mut self, url: String) -> Self {
-        self.url = Some(url);
+    pub fn with_url(mut self, url: impl Into<String>) -> Self {
+        self.url = Some(url.into());
         self
     }
 
-    pub fn with_text(mut self, text: String) -> Self {
-        self.text = Some(text);
+    pub fn with_text(mut self, text: impl Into<String>) -> Self {
+        self.text = Some(text.into());
         self
     }
 
@@ -257,13 +257,13 @@ impl SubmissionBuilder {
     ///
     /// let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
     /// let result = SubmissionBuilder::new()
-    ///     .with_id(SubmissionId::from("id111".to_string()).unwrap())
-    ///     .with_author_id("author111".to_string())
-    ///     .with_topic("topic111".to_string())
+    ///     .with_id(SubmissionId::from("id111").unwrap())
+    ///     .with_author_id("author111")
+    ///     .with_topic("topic111")
     ///     .with_ranking_score(999)
-    ///     .with_title("title111".to_string())
-    ///     .with_url("url111".to_string())
-    ///     .with_text("text111".to_string())
+    ///     .with_title("title111")
+    ///     .with_url("url111")
+    ///     .with_text("text111")
     ///     .with_created_at(current_dt)
     ///     .with_updated_at(current_dt)
     ///     .build()

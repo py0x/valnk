@@ -30,7 +30,7 @@ impl PrimaryKey {
     ///
     /// ```
     /// use valnk::data::model::comment::{PrimaryKey, CommentId};
-    /// let id = CommentId::from("id1".to_string()).unwrap();
+    /// let id = CommentId::from("id1").unwrap();
     /// let pk = PrimaryKey::new(&id);
     ///
     /// assert_eq!(pk, PrimaryKey {
@@ -66,7 +66,7 @@ impl SubmissionIndexKey {
     /// use valnk::data::model::submission::SubmissionId;
     /// use valnk::data::model::comment::SubmissionIndexKey;
     ///
-    /// let subm = SubmissionId::from("submission_id_123".to_string()).unwrap();
+    /// let subm = SubmissionId::from("submission_id_123").unwrap();
     /// let score = 192;
     ///
     /// let subm_key = SubmissionIndexKey::new(&subm, &score);
@@ -200,13 +200,13 @@ impl CommentBuilder {
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> Self {
-        self.author_id = Some(author_id);
+    pub fn with_author_id(mut self, author_id: impl Into<String>) -> Self {
+        self.author_id = Some(author_id.into());
         self
     }
 
-    pub fn with_topic(mut self, topic: String) -> Self {
-        self.topic = Some(topic);
+    pub fn with_topic(mut self, topic: impl Into<String>) -> Self {
+        self.topic = Some(topic.into());
         self
     }
 
@@ -215,8 +215,8 @@ impl CommentBuilder {
         self
     }
 
-    pub fn with_text(mut self, text: String) -> Self {
-        self.text = Some(text);
+    pub fn with_text(mut self, text: impl Into<String>) -> Self {
+        self.text = Some(text.into());
         self
     }
 
@@ -252,23 +252,23 @@ impl CommentBuilder {
     ///
     /// let current_dt = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
     /// let result = CommentBuilder::new()
-    ///     .with_id(CommentId::from("id111".to_string()).unwrap())
-    ///     .with_submission_id(SubmissionId::from("subm111".to_string()).unwrap())
-    ///     .with_author_id("author111".to_string())
+    ///     .with_id(CommentId::from("id111").unwrap())
+    ///     .with_submission_id(SubmissionId::from("subm111").unwrap())
+    ///     .with_author_id("author111")
     ///     .with_ranking_score(999)
-    ///     .with_text("text111".to_string())
+    ///     .with_text("text111")
     ///     .with_created_at(current_dt)
     ///     .with_updated_at(current_dt)
     ///     .build()
     ///     .unwrap();
     ///
-    /// let submission_id = SubmissionId::from("subm111".to_string()).unwrap();
+    /// let submission_id = SubmissionId::from("subm111").unwrap();
     /// let expected = Comment{
-    ///     primary_key: PrimaryKey::new(&CommentId::from("id111".to_string()).unwrap()),
+    ///     primary_key: PrimaryKey::new(&CommentId::from("id111").unwrap()),
     ///     submission_key: SubmissionIndexKey::new(&submission_id, &999),
     ///     author_key: AuthorIndexKey::new("author111", &current_dt),
     ///     entity_type: EntityType::Comment,
-    ///     id: CommentId::from("id111".to_string()).unwrap(),
+    ///     id: CommentId::from("id111").unwrap(),
     ///     submission_id: submission_id.clone(),
     ///     author_id: "author111".to_string(),
     ///     ranking_score: 999,

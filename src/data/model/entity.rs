@@ -20,9 +20,10 @@ impl EntityId {
         return EntityId(id);
     }
 
-    pub fn from(id: String) -> Result<EntityId, String> {
-        if id.len() > 0 {
-            return Ok(EntityId(id));
+    pub fn from(id: impl Into<String>) -> Result<EntityId, String> {
+        let id_str = id.into();
+        if id_str.len() > 0 {
+            return Ok(EntityId(id_str));
         }
 
         return Err("invalid EntityId: empty id".to_string());

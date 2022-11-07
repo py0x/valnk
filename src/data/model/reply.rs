@@ -29,7 +29,7 @@ impl PrimaryKey {
     ///
     /// ```
     /// use valnk::data::model::reply::{PrimaryKey, ReplyId};
-    /// let id = ReplyId::from("id1".to_string()).unwrap();
+    /// let id = ReplyId::from("id1").unwrap();
     /// let pk = PrimaryKey::new(&id);
     ///
     /// assert_eq!(pk, PrimaryKey {
@@ -67,8 +67,8 @@ impl SubmissionCommentIndexKey {
     /// use valnk::data::model::reply::SubmissionCommentIndexKey;
     /// use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
     ///
-    /// let subm = SubmissionId::from("submission_id_123".to_string()).unwrap();
-    /// let comm = CommentId::from("comment_id_123".to_string()).unwrap();
+    /// let subm = SubmissionId::from("submission_id_123").unwrap();
+    /// let comm = CommentId::from("comment_id_123").unwrap();
     /// let created_at = DateTime::<Utc>::from_utc(NaiveDateTime::from_timestamp(1234,0), Utc);
     ///
     /// let subm_key = SubmissionCommentIndexKey::new(&subm, &comm, &created_at);
@@ -202,13 +202,13 @@ impl ReplyBuilder {
         self
     }
 
-    pub fn with_author_id(mut self, author_id: String) -> Self {
-        self.author_id = Some(author_id);
+    pub fn with_author_id(mut self, author_id: impl Into<String>) -> Self {
+        self.author_id = Some(author_id.into());
         self
     }
 
-    pub fn with_text(mut self, text: String) -> Self {
-        self.text = Some(text);
+    pub fn with_text(mut self, text: impl Into<String>) -> Self {
+        self.text = Some(text.into());
         self
     }
 
@@ -242,8 +242,8 @@ impl ReplyBuilder {
     ///     .with_id(reply_id.clone())
     ///     .with_submission_id(submission_id.clone())
     ///     .with_comment_id(comment_id.clone())
-    ///     .with_author_id("author111".to_string())
-    ///     .with_text("text111".to_string())
+    ///     .with_author_id("author111")
+    ///     .with_text("text111")
     ///     .with_created_at(current_dt)
     ///     .with_updated_at(current_dt)
     ///     .build()

@@ -66,16 +66,22 @@ async fn test_put_item() {
     println!("{res:#?}");
 }
 
-#[tokio::test]
-async fn test_scan_item() {
-    let shared_config = aws_config::load_from_env().await;
-    let client = aws_sdk_dynamodb::Client::new(&shared_config);
+// #[tokio::test]
+// async fn test_subm_create_item() {
+//     let cli =
+//
+// }
 
-    // Get documents from DynamoDB
-    let result = client.scan().table_name("valnk-content").send().await.unwrap();
-
-    for item in result.items.unwrap() {
-        let subm: Submission = serde_dynamo::from_item(item).unwrap();
-        println!("subm: {subm:#?}");
-    }
-}
+// #[tokio::test]
+// async fn test_scan_item() {
+//     let shared_config = aws_config::load_from_env().await;
+//     let client = aws_sdk_dynamodb::Client::new(&shared_config);
+//
+//     // Get documents from DynamoDB
+//     let result = client.scan().table_name("valnk-content").send().await.unwrap();
+//
+//     for item in result.items.unwrap() {
+//         let subm: Submission = serde_dynamo::from_item(item).unwrap();
+//         println!("subm: {subm:#?}");
+//     }
+// }
