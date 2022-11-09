@@ -6,6 +6,7 @@ use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
 use tokio;
 
 use serde_dynamo;
+use serde_json;
 use aws_sdk_dynamodb;
 use aws_config;
 use serde_dynamo::Item;
@@ -72,16 +73,29 @@ async fn test_put_item() {
 //
 // }
 
-// #[tokio::test]
-// async fn test_scan_item() {
-//     let shared_config = aws_config::load_from_env().await;
-//     let client = aws_sdk_dynamodb::Client::new(&shared_config);
-//
-//     // Get documents from DynamoDB
-//     let result = client.scan().table_name("valnk-content").send().await.unwrap();
-//
-//     for item in result.items.unwrap() {
-//         let subm: Submission = serde_dynamo::from_item(item).unwrap();
-//         println!("subm: {subm:#?}");
-//     }
-// }
+#[tokio::test]
+async fn test_scan_item() {
+    let shared_config = aws_config::load_from_env().await;
+    let client = aws_sdk_dynamodb::Client::new(&shared_config);
+
+    // Get documents from DynamoDB
+    let result = client.scan().table_name("valnk-content").send().await.unwrap();
+
+    for item in result.items.unwrap() {
+        let subm: Submission = serde_dynamo::from_item(item).unwrap();
+        println!("subm: {subm:#?}");
+    }
+}
+
+#[test]
+fn test_json_topic_key() {
+    let topic = "topic_xxx";
+    let score = 192;
+    let topic_key = TopicIndexKey::new(topic, &score);
+
+    let tkj = serde_json::to_string(&topic_key).unwrap();
+
+    let tk_fromj: TopicIndexKey = serde_json::from_str(&tkj).unwrap();
+
+    println!("{tk_fromj:#?}");
+}

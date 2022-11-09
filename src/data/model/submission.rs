@@ -15,7 +15,7 @@ pub type RankingScore = i64;
 pub type SubmissionId = EntityId;
 
 /// The PrimaryKey of the `submission` item.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct PrimaryKey {
     #[serde(rename(serialize = "PK", deserialize = "PK"))]
     pub pk: String,
@@ -50,7 +50,7 @@ impl PrimaryKey {
 
 
 /// For indexing submissions by `topic`.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct TopicIndexKey {
     #[serde(rename(serialize = "GSI1_PK", deserialize = "GSI1_PK"))]
     pub pk: String,
@@ -59,6 +59,8 @@ pub struct TopicIndexKey {
 }
 
 impl TopicIndexKey {
+    pub const INDEX_NAME: &'static str = "GSI1";
+
     /// # Examples
     ///
     /// ```
@@ -75,18 +77,28 @@ impl TopicIndexKey {
     /// assert_eq!(topic_key, expected);
     /// ```
     pub fn new(topic: &str, score: &RankingScore) -> Self {
-        let pk = format!("{TOPIC_TAG}#{topic}");
-        let sk = format!("{SUBMISSION_TAG}#{score:010}");
-
         return Self {
-            pk,
-            sk,
+            pk: Self::pk(topic),
+            sk: Self::sk(score),
         };
+    }
+
+    pub fn pk(topic: &str) -> String {
+        format!("{TOPIC_TAG}#{topic}")
+    }
+
+    pub fn sk(score: &RankingScore) -> String {
+        let pfx = Self::sk_prefix();
+        return format!("{pfx}{score:010}");
+    }
+
+    pub fn sk_prefix() -> String {
+        return format!("{SUBMISSION_TAG}#");
     }
 }
 
 /// For indexing submissions by `author_id`.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct AuthorIndexKey {
     #[serde(rename(serialize = "GSI2_PK", deserialize = "GSI2_PK"))]
     pub pk: String,
@@ -126,7 +138,7 @@ impl AuthorIndexKey {
 }
 
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Submission {
     // index-key fields
     #[serde(flatten)]

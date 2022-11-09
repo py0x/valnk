@@ -2,7 +2,7 @@ use std::fmt;
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum EntityType {
     Submission,

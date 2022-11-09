@@ -16,7 +16,7 @@ const AUTHOR_TAG: &str = "AUTHR";
 pub type RankingScore = i64;
 pub type CommentId = EntityId;
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct PrimaryKey {
     #[serde(rename(serialize = "PK", deserialize = "PK"))]
     pub pk: String,
@@ -51,7 +51,7 @@ impl PrimaryKey {
 }
 
 /// For indexing comments by `submission_id`.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct SubmissionIndexKey {
     #[serde(rename(serialize = "GSI1_PK", deserialize = "GSI1_PK"))]
     pub pk: String,
@@ -88,7 +88,7 @@ impl SubmissionIndexKey {
 }
 
 /// For indexing comments by `author_id`.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct AuthorIndexKey {
     #[serde(rename(serialize = "GSI2_PK", deserialize = "GSI2_PK"))]
     pub pk: String,
@@ -128,7 +128,7 @@ impl AuthorIndexKey {
 }
 
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Comment {
     // index-key fields
     #[serde(flatten)]
